@@ -42,7 +42,7 @@ func TestCreateGetItem(t *testing.T) {
 	setupTestDB()
 	router := setupRouter()
 
-	// Créer un item
+	t.Log("Création d'un item TestItem")
 	item := models.Item{Name: "TestItem", Price: 12.5}
 	jsonValue, _ := json.Marshal(item)
 	req, _ := http.NewRequest("POST", "/items", bytes.NewBuffer(jsonValue))
@@ -50,21 +50,24 @@ func TestCreateGetItem(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
+	t.Logf("Code retour création: %d, Body: %s", resp.Code, resp.Body.String())
 	if resp.Code != http.StatusCreated {
 		t.Errorf("Expected status 201, got %d", resp.Code)
 	}
 
-	// Récupérer l'item créé
+	t.Log("Récupération de l'item créé")
 	req, _ = http.NewRequest("GET", "/items/1", nil)
 	resp = httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
+	t.Logf("Code retour récupération: %d, Body: %s", resp.Code, resp.Body.String())
 	if resp.Code != http.StatusOK {
 		t.Errorf("Expected status 200, got %d", resp.Code)
 	}
 
 	var returnedItem models.Item
 	json.Unmarshal(resp.Body.Bytes(), &returnedItem)
+	t.Logf("Item récupéré: %+v", returnedItem)
 	if returnedItem.Name != "TestItem" {
 		t.Errorf("Expected item name 'TestItem', got '%s'", returnedItem.Name)
 	}
