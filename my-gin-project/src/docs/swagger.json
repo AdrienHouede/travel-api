@@ -9,6 +9,101 @@
     "host": "localhost:8080",
     "basePath": "/",
     "paths": {
+        "/chat": {
+            "post": {
+                "description": "Envoie un message au bot et reçoit une réponse",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chatbot"
+                ],
+                "summary": "Chat avec le bot",
+                "parameters": [
+                    {
+                        "description": "Message de l'utilisateur",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Message"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/chat-ai": {
+            "post": {
+                "description": "Envoie un message au modèle IA exécuté dans Docker (Ollama)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Chatbot"
+                ],
+                "summary": "Chat avec modèle IA local",
+                "parameters": [
+                    {
+                        "description": "Message de l'utilisateur",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/controllers.AIMessage"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/controllers.AIResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/items": {
             "get": {
                 "security": [
@@ -365,6 +460,47 @@
         }
     },
     "definitions": {
+        "controllers.AIMessage": {
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string",
+                    "example": "Bonjour, raconte-moi une blague."
+                },
+                "user": {
+                    "type": "string",
+                    "example": "Alice"
+                }
+            }
+        },
+        "controllers.AIResponse": {
+            "type": "object",
+            "properties": {
+                "bot": {
+                    "type": "string",
+                    "example": "Voici une blague..."
+                }
+            }
+        },
+        "controllers.Message": {
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
+        "controllers.Response": {
+            "type": "object",
+            "properties": {
+                "bot": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Item": {
             "type": "object",
             "properties": {

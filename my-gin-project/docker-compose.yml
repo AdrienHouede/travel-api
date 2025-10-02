@@ -34,5 +34,18 @@ services:
       start_period: 10s
     restart: always
 
+  ia:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    environment:
+      IA_HOST: ia
+      IA_PORT: 11434
+    restart: always
+    volumes:
+      - ollama_data:/root/.ollama
+
 volumes:
   db_data:
+  ollama_data:

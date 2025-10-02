@@ -18,6 +18,10 @@ func SetupRoutes(router *gin.Engine) {
 	router.POST("/register", controller.Register)
 	router.POST("/login", controller.Login)
 
+	// Ajout des chatbot
+	router.POST("/chat", controller.Chat)
+	router.POST("/chat-ai", controller.ChatAI)
+
 	// Routes protégées
 	authorized := router.Group("/")
 	authorized.Use(controllers.AuthMiddleware())
@@ -34,5 +38,4 @@ func SetupRoutes(router *gin.Engine) {
 	router.GET("/swagger", func(c *gin.Context) {
 		c.Redirect(302, "/swagger/index.html")
 	})
-
 }
