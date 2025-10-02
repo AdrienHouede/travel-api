@@ -21,19 +21,25 @@ type User struct {
 
 var DB *gorm.DB
 
-func InitDB() error {
+func InitDB() (*gorm.DB, error) {
 	dsn := os.Getenv("DB_USER") + ":" +
 		os.Getenv("DB_PASSWORD") + "@tcp(" +
 		os.Getenv("DB_HOST") + ":" +
 		os.Getenv("DB_PORT") + ")/" +
 		os.Getenv("DB_NAME") + "?charset=utf8mb4&parseTime=True&loc=Local"
+
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return err
+		return nil, err
 	}
-	db.AutoMigrate(&User{})
+
+	// Migrer les modèles
+	db.AutoMigrate(&User{}, &Item{})
+
+	// Conserver la DB globale
 	DB = db
-	return nil
+
+	return db, nil
 }
 
 func (item *Item) UpdatePrice(newPrice float64) {

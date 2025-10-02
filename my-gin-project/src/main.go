@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"my-gin-project/src/controllers"
 	"my-gin-project/src/models"
 	"my-gin-project/src/routes"
 
@@ -35,9 +36,14 @@ func main() {
 
 	defer sentry.Flush(2 * time.Second) // s'assure que les événements sont envoyés avant la fin du programme
 
-	// Initialisation DB
-	if err := models.InitDB(); err != nil {
+	db, err := models.InitDB()
+	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
+	}
+
+	// Créer le controller avec la DB
+	chatController := &controllers.Controller{
+		DB: db,
 	}
 
 	r := gin.Default()
@@ -57,7 +63,7 @@ func main() {
 	})
 
 	// Configuration des routes
-	routes.SetupRoutes(r)
+	routes.SetupRoutes(r, chatController)
 
 	// Lancement du serveur
 	r.Run(":8080")

@@ -10,9 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
-type Controller struct{}
+type Controller struct {
+	DB *gorm.DB
+}
 
 var jwtSecret = []byte("secret") // à mettre dans une variable d'environnement en prod
 

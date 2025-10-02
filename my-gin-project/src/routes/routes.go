@@ -11,26 +11,25 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func SetupRoutes(router *gin.Engine) {
-	controller := controllers.Controller{}
+func SetupRoutes(router *gin.Engine, ctrl *controllers.Controller) {
 
 	// Routes publiques
-	router.POST("/register", controller.Register)
-	router.POST("/login", controller.Login)
+	router.POST("/register", ctrl.Register)
+	router.POST("/login", ctrl.Login)
 
 	// Ajout des chatbot
-	router.POST("/chat", controller.Chat)
-	router.POST("/chat-ai", controller.ChatAI)
+	router.POST("/chat", ctrl.Chat)
+	router.POST("/chat-ai", ctrl.ChatAI)
 
 	// Routes protégées
 	authorized := router.Group("/")
 	authorized.Use(controllers.AuthMiddleware())
 	{
-		authorized.GET("/items", controller.GetItems)
-		authorized.GET("/items/:id", controller.GetItemByID)
-		authorized.POST("/items", controller.CreateItem)
-		authorized.PUT("/items/:id", controller.UpdateItem)
-		authorized.DELETE("/items/:id", controller.DeleteItem)
+		authorized.GET("/items", ctrl.GetItems)
+		authorized.GET("/items/:id", ctrl.GetItemByID)
+		authorized.POST("/items", ctrl.CreateItem)
+		authorized.PUT("/items/:id", ctrl.UpdateItem)
+		authorized.DELETE("/items/:id", ctrl.DeleteItem)
 	}
 
 	// Route Swagger
