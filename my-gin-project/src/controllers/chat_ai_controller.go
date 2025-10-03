@@ -34,12 +34,12 @@ func (ConversationHistory) TableName() string {
 }
 
 type AIMessage struct {
-	User string `json:"user" example:"Alice"`
-	Text string `json:"text" example:"Bonjour, raconte-moi une blague."`
+	User string `json:"user" example:"Thomas"`
+	Text string `json:"text" example:"Trouve moi la meilleure destination en europe accessible en train"`
 }
 
 type AIResponse struct {
-	Bot string `json:"bot" example:"Voici une blague..."`
+	Bot string `json:"bot" example:"Trouve moi une destination"`
 }
 
 type OllamaStreamResp struct {
